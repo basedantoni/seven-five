@@ -1,0 +1,5 @@
+{
+  "extends": "@antho/tsconfig/internal-package",
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

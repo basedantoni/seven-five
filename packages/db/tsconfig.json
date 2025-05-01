@@ -1,0 +1,5 @@
+{
+  "extends": "@antho/tsconfig/internal-package",
+  "include": ["src", "drizzle.config.ts"],
+  "exclude": ["node_modules"]
+}

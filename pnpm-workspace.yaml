@@ -1,0 +1,29 @@
+packages:
+  - apps/*
+  - packages/*
+  - tooling/*
+catalog:
+  # Dev Tooling
+  '@types/node': ^22.13.9
+  eslint: ^9.22.0
+  prettier: ^3.5.3
+  tailwindcss: ^4.0.0
+  typescript: ^5.8.2
+
+  # Misc
+  lucide-react: ^0.482.0
+  turbo: ^2.4.4
+  zod: ^3.24.2
+
+  # React
+  '@types/react': 19.0.10
+  '@types/react-dom': 19.0.4
+  next: ^15.2.3
+  react: ^19.0.0
+  react-dom: ^19.0.0
+
+  # Tanstack & tRPC
+  '@tanstack/react-query': ^5.68.0
+  '@trpc/client': ^11.0.0-rc.824
+  '@trpc/tanstack-react-query': ^11.0.0-rc.824
+  '@trpc/server': ^11.0.0-rc.824

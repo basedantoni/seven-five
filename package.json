@@ -1,0 +1,27 @@
+{
+  "name": "anthorepo",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo run clean",
+    "db:generate": "turbo -F @antho/db drizzle:generate",
+    "db:migrate": "turbo -F @antho/db migrate",
+    "db:push": "turbo -F @antho/db push",
+    "db:studio": "turbo -F @antho/db studio",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "typecheck": "turbo run typecheck",
+    "ui": "turbo run ui"
+  },
+  "devDependencies": {
+    "prettier": "catalog:",
+    "turbo": "catalog:",
+    "typescript": "catalog:"
+  },
+  "packageManager": "pnpm@9.5.0",
+  "engines": {
+    "node": ">=22"
+  }
+}

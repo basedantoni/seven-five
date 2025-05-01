@@ -1,0 +1,47 @@
+{
+  "name": "@antho/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsc",
+    "clean": "git clean -xdf node_modules dist",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "with:env": "dotenv -e ../../.env --"
+  },
+  "peerDependencies": {
+    "next": "catalog:"
+  },
+  "devDependencies": {
+    "@antho/eslint-config": "workspace:*",
+    "@antho/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  },
+  "dependencies": {
+    "@supabase/ssr": "^0.6.1",
+    "@supabase/supabase-js": "^2.49.4"
+  },
+  "exports": {
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
+    },
+    "./middleware": {
+      "types": "./dist/middleware.d.ts",
+      "default": "./src/middleware.ts"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./src/server.ts"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.ts",
+      "default": "./src/types/index.ts"
+    }
+  }
+}

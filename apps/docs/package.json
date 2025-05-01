@@ -1,0 +1,32 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "clean": "git clean -xdf .cache .next .turbo node_modules",
+    "dev": "pnpm with:env next dev --turbopack --port 3001",
+    "build": "pnpm with:env next build",
+    "start": "pnpm with:env next start",
+    "lint": "next lint --max-warnings 0",
+    "typecheck": "tsc --noEmit",
+    "with:env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@antho/ui": "workspace:*",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@antho/eslint-config": "workspace:*",
+    "@antho/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "eslint": "catalog:",
+    "dotenv-cli": "^8.0.0",
+    "tailwindcss": "catalog:",
+    "typescript": "catalog:"
+  }
+}

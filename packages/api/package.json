@@ -1,0 +1,35 @@
+{
+  "name": "@antho/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "dev": "tsc",
+    "clean": "git clean -xdf node_modules dist",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "with:env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "@antho/auth": "workspace:*",
+    "@antho/db": "workspace:*",
+    "@trpc/server": "catalog:",
+    "superjson": "^2.2.2",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@antho/eslint-config": "workspace:*",
+    "@antho/tsconfig": "workspace:*",
+    "@types/node": "catalog:",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
+  }
+}

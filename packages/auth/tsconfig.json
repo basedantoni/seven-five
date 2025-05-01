@@ -1,0 +1,11 @@
+{
+  "extends": "@antho/tsconfig/internal-package",
+  "compilerOptions": {
+    "sourceMap": true,
+    "noEmit": false,
+    "baseUrl": "src",
+    "outDir": "dist"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
