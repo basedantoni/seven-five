@@ -7,12 +7,6 @@ import {
 import { z } from 'zod';
 import { nanoid } from 'nanoid';
 
-export const users = pgTable('users', {
-  id: serial('id').primaryKey(),
-  fullName: text('full_name'),
-  phone: varchar('phone', { length: 256 }),
-});
-
 export const posts = pgTable('posts', {
   privateId: serial('private_id').primaryKey(),
   publicId: varchar('public_id', { length: 256 })
