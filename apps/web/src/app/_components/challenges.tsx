@@ -1,10 +1,7 @@
 'use client';
 
-import Link from 'next/link';
-
 import { RouterOutputs } from '@antho/api';
-import { insertPostSchema, NewPost } from '@antho/db/schema';
-
+import { NewChallenge, insertChallengeSchema } from '@antho/db/schema';
 import { Button } from '@antho/ui/components/button';
 import {
   Form,
@@ -13,65 +10,73 @@ import {
   FormLabel,
   FormControl,
   useForm,
+  FormMessage,
 } from '@antho/ui/components/form';
 import { Input } from '@antho/ui/components/input';
 import { Textarea } from '@antho/ui/components/textarea';
-import { toast } from '@antho/ui/components/sonner';
+import Link from 'next/link';
 
 import {
-  useMutation,
-  useQueryClient,
   useSuspenseQuery,
+  useQueryClient,
+  useMutation,
+  useQuery,
 } from '@tanstack/react-query';
 import { useTRPC } from '~/trpc/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-export function PostList() {
+export function ChallengeCard({
+  challenge,
+}: {
+  challenge: RouterOutputs['challenge']['all'][number];
+}) {
+  return (
+    <Link href={`/challenges/${challenge.id}`}>
+      <div>{challenge.name}</div>
+    </Link>
+  );
+}
+
+export function ChallengeList() {
   const trpc = useTRPC();
   const queryClient = useQueryClient();
-  const { data: posts } = useSuspenseQuery(trpc.post.all.queryOptions());
+  const { data: challenges } = useSuspenseQuery(
+    trpc.challenge.all.queryOptions()
+  );
 
-  const { mutate: updatePost } = useMutation(
-    trpc.post.update.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries(trpc.post.pathFilter());
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
+  const { mutate: updateChallenge } = useMutation(
+    trpc.challenge.update.mutationOptions({
+      onSuccess: () =>
+        queryClient.invalidateQueries(trpc.challenge.pathFilter()),
     })
   );
 
-  const { mutate: deletePost } = useMutation(
-    trpc.post.delete.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries(trpc.post.pathFilter());
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
+  const { mutate: deleteChallenge } = useMutation(
+    trpc.challenge.delete.mutationOptions({
+      onSuccess: () =>
+        queryClient.invalidateQueries(trpc.challenge.pathFilter()),
     })
   );
 
-  if (posts.length === 0) {
-    return <p>No posts found</p>;
+  if (challenges.length === 0) {
+    return <div>No challenges</div>;
   }
 
   return (
     <>
-      {posts.map((p) => (
+      {challenges.map((challenge) => (
         <div
-          key={p.publicId}
+          key={challenge.id}
           className='flex items-center justify-between space-y-4'
         >
-          <Post post={p} />
+          <ChallengeCard challenge={challenge} />
           <div className='flex items-center gap-2'>
             <Button
               className='cursor-pointer'
               variant='outline'
               size='sm'
               onClick={() =>
-                updatePost({ publicId: p.publicId, title: 'Updated' })
+                updateChallenge({ id: challenge.id, name: 'New Name' })
               }
             >
               Update
@@ -80,7 +85,7 @@ export function PostList() {
               className='cursor-pointer'
               variant='destructive'
               size='sm'
-              onClick={() => deletePost({ publicId: p.publicId })}
+              onClick={() => deleteChallenge({ id: challenge.id })}
             >
               Delete
             </Button>
@@ -91,30 +96,23 @@ export function PostList() {
   );
 }
 
-export function Post({ post }: { post: RouterOutputs['post']['all'][number] }) {
-  return (
-    <Link href={`/posts/${post.publicId}`}>
-      <h1>{post.title}</h1>
-    </Link>
-  );
-}
-
-export function CreatePostForm() {
+export function CreateChallengeForm() {
   const trpc = useTRPC();
-  const form = useForm<NewPost>({
-    resolver: zodResolver(insertPostSchema),
+  const form = useForm<NewChallenge>({
+    resolver: zodResolver(insertChallengeSchema),
     defaultValues: {
-      title: '',
-      content: '',
+      name: '',
+      description: '',
     },
   });
   const queryClient = useQueryClient();
+  console.log(form.formState.errors);
 
-  const { mutate: createPost, isPending } = useMutation(
-    trpc.post.create.mutationOptions({
+  const { mutate: createChallenge, isPending } = useMutation(
+    trpc.challenge.create.mutationOptions({
       onSuccess: async () => {
         form.reset();
-        await queryClient.invalidateQueries(trpc.post.pathFilter());
+        await queryClient.invalidateQueries(trpc.challenge.pathFilter());
       },
     })
   );
@@ -123,29 +121,31 @@ export function CreatePostForm() {
     <Form {...form}>
       <form
         className='space-y-3 p-2'
-        onSubmit={form.handleSubmit((data) => createPost(data))}
+        onSubmit={form.handleSubmit((data) => createChallenge(data))}
       >
         <FormField
           control={form.control}
-          name='title'
+          name='name'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input {...field} value={field.value ?? ''} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name='content'
+          name='description'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Content</FormLabel>
+              <FormLabel>Description</FormLabel>
               <FormControl>
                 <Textarea {...field} value={field.value ?? ''} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -154,5 +154,22 @@ export function CreatePostForm() {
         </Button>
       </form>
     </Form>
+  );
+}
+
+export function ChallengeTasks({ id }: { id: number }) {
+  const trpc = useTRPC();
+  const { data: challenge } = useQuery(
+    trpc.challenge.byId.queryOptions({ id })
+  );
+
+  if (!challenge) {
+    return <div>No challenge</div>;
+  }
+
+  return (
+    <div>
+      <h2>{challenge.name}</h2>
+    </div>
   );
 }

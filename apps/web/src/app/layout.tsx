@@ -2,6 +2,7 @@ import '@antho/ui/globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import { TRPCReactProvider } from '~/trpc/react';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Toaster } from '@antho/ui/components/sonner';
 import { ThemeProvider } from './_components/theme-provider';
 
@@ -35,6 +36,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <ReactQueryDevtools />
           </ThemeProvider>
           <Toaster />
         </body>

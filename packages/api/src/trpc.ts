@@ -1,4 +1,6 @@
 import { createClient } from '@antho/auth/server';
+import { eq } from '@antho/db';
+import { accounts } from '@antho/db/schema';
 import db from '@antho/db/client';
 import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from 'superjson';
@@ -79,10 +81,23 @@ const enforceUserAuth = t.middleware(async ({ ctx, next }) => {
     });
   }
 
+  const account = await db
+    .select()
+    .from(accounts)
+    .where(eq(accounts.userId, user.id))
+    .limit(1);
+
+  if (account.length === 0 || account[0] === undefined) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'You must be logged in to access this resource',
+    });
+  }
   return next({
     ctx: {
       ...ctx,
       db,
+      account: account[0],
     },
   });
 });

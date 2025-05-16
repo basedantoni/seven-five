@@ -271,6 +271,9 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.68.0(react@19.0.0)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.75.2
+        version: 5.75.2(@tanstack/react-query@5.68.0(react@19.0.0))(react@19.0.0)
       '@trpc/client':
         specifier: 'catalog:'
         version: 11.0.0-rc.828(@trpc/server@11.0.0-rc.828(typescript@5.8.2))(typescript@5.8.2)
@@ -509,7 +512,7 @@ importers:
         version: 4.0.14
       '@turbo/gen':
         specifier: ^2.4.2
-        version: 2.4.4(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@20.17.24)(typescript@5.8.2)
+        version: 2.4.4(@swc/core@1.11.13)(@types/node@20.17.24)(typescript@5.8.2)
       '@types/node':
         specifier: ^20
         version: 20.17.24
@@ -2465,6 +2468,15 @@ packages:
 
   '@tanstack/query-core@5.68.0':
     resolution: {integrity: sha512-r8rFYYo8/sY/LNaOqX84h12w7EQev4abFXDWy4UoDVUJzJ5d9Fbmb8ayTi7ScG+V0ap44SF3vNs/45mkzDGyGw==}
+
+  '@tanstack/query-devtools@5.74.7':
+    resolution: {integrity: sha512-nSNlfuGdnHf4yB0S+BoNYOE1o3oAH093weAYZolIHfS2stulyA/gWfSk/9H4ZFk5mAAHb5vNqAeJOmbdcGPEQw==}
+
+  '@tanstack/react-query-devtools@5.75.2':
+    resolution: {integrity: sha512-bOwfNBka4Xc4Q2EhOW15arll7UkavwMgEAbbqnEDbrpHFxbZR33EYIMh9SyUmqVsZEv0rGmbvzK8OsXRjTTTuA==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.75.2
+      react: ^18 || ^19
 
   '@tanstack/react-query@5.68.0':
     resolution: {integrity: sha512-mMOdGDKlwTP/WV72QqSNf4PAMeoBp/DqBHQ222wBfb51Looi8QUqnCnb9O98ZgvNISmy6fzxRGBJdZ+9IBvX2Q==}
@@ -9011,7 +9023,7 @@ snapshots:
   '@swc/core-win32-x64-msvc@1.11.13':
     optional: true
 
-  '@swc/core@1.11.13(@swc/helpers@0.5.15)':
+  '@swc/core@1.11.13':
     dependencies:
       '@swc/counter': 0.1.3
       '@swc/types': 0.1.20
@@ -9026,7 +9038,6 @@ snapshots:
       '@swc/core-win32-arm64-msvc': 1.11.13
       '@swc/core-win32-ia32-msvc': 1.11.13
       '@swc/core-win32-x64-msvc': 1.11.13
-      '@swc/helpers': 0.5.15
     optional: true
 
   '@swc/counter@0.1.3': {}
@@ -9116,6 +9127,14 @@ snapshots:
 
   '@tanstack/query-core@5.68.0': {}
 
+  '@tanstack/query-devtools@5.74.7': {}
+
+  '@tanstack/react-query-devtools@5.75.2(@tanstack/react-query@5.68.0(react@19.0.0))(react@19.0.0)':
+    dependencies:
+      '@tanstack/query-devtools': 5.74.7
+      '@tanstack/react-query': 5.68.0(react@19.0.0)
+      react: 19.0.0
+
   '@tanstack/react-query@5.68.0(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 5.68.0
@@ -9163,7 +9182,7 @@ snapshots:
 
   '@tsconfig/node16@1.0.4': {}
 
-  '@turbo/gen@2.4.4(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@20.17.24)(typescript@5.8.2)':
+  '@turbo/gen@2.4.4(@swc/core@1.11.13)(@types/node@20.17.24)(typescript@5.8.2)':
     dependencies:
       '@turbo/workspaces': 2.4.4
       commander: 10.0.1
@@ -9173,7 +9192,7 @@ snapshots:
       node-plop: 0.26.3
       picocolors: 1.0.1
       proxy-agent: 6.5.0
-      ts-node: 10.9.2(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@20.17.24)(typescript@5.8.2)
+      ts-node: 10.9.2(@swc/core@1.11.13)(@types/node@20.17.24)(typescript@5.8.2)
       update-check: 1.5.4
       validate-npm-package-name: 5.0.1
     transitivePeerDependencies:
@@ -13869,7 +13888,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-node@10.9.2(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@20.17.24)(typescript@5.8.2):
+  ts-node@10.9.2(@swc/core@1.11.13)(@types/node@20.17.24)(typescript@5.8.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
@@ -13887,7 +13906,7 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
-      '@swc/core': 1.11.13(@swc/helpers@0.5.15)
+      '@swc/core': 1.11.13
 
   tsconfig-paths@3.15.0:
     dependencies:

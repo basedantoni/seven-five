@@ -27,7 +27,7 @@ export default function Home() {
 
         <div className='flex gap-4 items-center flex-col sm:flex-row'>
           <Button asChild variant='link'>
-            <Link href='/posts'>Posts</Link>
+            <Link href='/challenges'>Challenges</Link>
           </Button>
         </div>
       </main>

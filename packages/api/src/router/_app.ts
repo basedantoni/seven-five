@@ -1,8 +1,15 @@
-import { postRouter } from './post';
 import { createTRPCRouter } from '../trpc';
 
+import { accountRouter } from './accounts';
+import { challengeRouter } from './challenges';
+import { taskRouter } from './tasks';
+import { taskLogRouter } from './taskLogs';
+
 export const appRouter = createTRPCRouter({
-  post: postRouter,
+  account: accountRouter,
+  challenge: challengeRouter,
+  task: taskRouter,
+  taskLog: taskLogRouter,
 });
 
 export type AppRouter = typeof appRouter;
