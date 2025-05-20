@@ -2,12 +2,6 @@ import { bigint, integer, pgTable, primaryKey } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { challenges } from './challenges';
 import { tasks } from './tasks';
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from 'drizzle-zod';
-import { z } from 'zod';
 
 /**
  * ChallengeTasks is the join table between challenges and tasks.
@@ -38,20 +32,3 @@ export const challengeTasksRelations = relations(challengeTasks, ({ one }) => ({
     references: [tasks.id],
   }),
 }));
-
-export const insertChallengeTaskSchema = createInsertSchema(challengeTasks);
-export const selectChallengeTaskSchema = createSelectSchema(challengeTasks);
-export const updateChallengeTaskSchema = createUpdateSchema(
-  challengeTasks
-).extend({
-  challengeId: z.number().min(1, 'Challenge ID is required'),
-  taskId: z.number().min(1, 'Task ID is required'),
-});
-export const challengeTaskIdSchema = selectChallengeTaskSchema.pick({
-  challengeId: true,
-  taskId: true,
-});
-
-export type ChallengeTask = typeof challengeTasks.$inferSelect;
-export type NewChallengeTask = z.infer<typeof insertChallengeTaskSchema>;
-export type ChallengeTaskId = z.infer<typeof challengeTaskIdSchema>;

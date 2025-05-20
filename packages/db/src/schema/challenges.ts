@@ -39,14 +39,3 @@ export const challengesRelations = relations(challenges, ({ many, one }) => ({
   }),
   challengeTasks: many(challengeTasks),
 }));
-
-export const insertChallengeSchema = createInsertSchema(challenges);
-export const selectChallengeSchema = createSelectSchema(challenges);
-export const updateChallengeSchema = createUpdateSchema(challenges).extend({
-  id: z.number().min(1, 'ID is required'),
-});
-export const challengeIdSchema = selectChallengeSchema.pick({ id: true });
-
-export type Challenge = typeof challenges.$inferSelect;
-export type NewChallenge = z.infer<typeof insertChallengeSchema>;
-export type ChallengeId = z.infer<typeof challengeIdSchema>['id'];

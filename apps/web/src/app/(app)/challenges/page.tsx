@@ -30,7 +30,6 @@ export default async function ChallengesPage() {
           </div>
         </div>
         <div className='w-full max-w-2xl overflow-y-scroll space-y-2'>
-          <h2 className='text-2xl font-bold'>Create Challenge</h2>
           <CreateChallengeForm />
         </div>
       </main>
