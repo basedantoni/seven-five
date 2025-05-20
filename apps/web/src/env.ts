@@ -1,6 +1,6 @@
 import { createEnv } from '@t3-oss/env-nextjs';
 import { vercel } from '@t3-oss/env-nextjs/presets-zod';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const env = createEnv({
   extends: [vercel()],
@@ -14,7 +14,7 @@ export const env = createEnv({
    * This way you can ensure the app isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z.string().url(),
+    DATABASE_URL: z.url(),
   },
 
   /**

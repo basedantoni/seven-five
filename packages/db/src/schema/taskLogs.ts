@@ -8,13 +8,6 @@ import {
   timestamp,
 } from 'drizzle-orm/pg-core';
 import { challengeTasks } from './challengeTasks';
-import { accounts } from './accounts';
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from 'drizzle-zod';
-import { z } from 'zod';
 
 /**
  * TaskLogs represent a single log of a task.

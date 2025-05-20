@@ -2,12 +2,6 @@ import { relations, sql } from 'drizzle-orm';
 import { bigint, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { challengeTasks } from './challengeTasks';
 import { taskLogs } from './taskLogs';
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from 'drizzle-zod';
-import { z } from 'zod';
 
 /**
  * Tasks represent a single action

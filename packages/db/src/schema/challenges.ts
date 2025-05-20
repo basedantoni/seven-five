@@ -3,12 +3,6 @@ import { bigint, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { challengeTasks } from './challengeTasks';
 import { accounts } from './accounts';
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from 'drizzle-zod';
-import { z } from 'zod';
 
 /**
  * Challenges represent long instances of
