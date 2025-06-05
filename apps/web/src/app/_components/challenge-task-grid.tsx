@@ -19,6 +19,7 @@ import {
 } from '@antho/ui/components/dialog';
 import { Label } from '@antho/ui/components/label';
 import { toast } from 'sonner';
+import { prefetch } from '~/trpc/server';
 
 export function ChallengeTaskGrid({ id }: { id: number }) {
   const trpc = useTRPC();
@@ -35,8 +36,8 @@ export function ChallengeTaskGrid({ id }: { id: number }) {
     );
   }, [challenge]);
 
-  const { mutate: createTaskLog } = useMutation(
-    trpc.taskLog.create.mutationOptions({
+  const { mutate: createChallengeDay } = useMutation(
+    trpc.challengeDay.create.mutationOptions({
       onSuccess: () => {
         toast.success('Task logged successfully');
         setSelectedTasks([]);
@@ -52,20 +53,7 @@ export function ChallengeTaskGrid({ id }: { id: number }) {
   const handleLogTasks = () => {
     if (!challenge) return;
 
-    selectedTasks.forEach((taskId) => {
-      createTaskLog({
-        challengeId: challenge.id,
-        taskId,
-        completed: true,
-      });
-    });
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    if (!open) {
-      setSelectedDay(null);
-      setSelectedTasks([]);
-    }
+    selectedTasks.forEach((taskId) => {});
   };
 
   if (!challenge) {

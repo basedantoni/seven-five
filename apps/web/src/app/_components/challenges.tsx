@@ -12,7 +12,6 @@ import { useTRPC } from '~/trpc/react';
 
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
@@ -23,16 +22,22 @@ export function ChallengeCard({
 }: {
   challenge: RouterOutputs['challenge']['all'][number];
 }) {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const handleMouseEnter = () => {
+    queryClient.prefetchQuery(
+      trpc.challenge.byId.queryOptions({ id: challenge.id })
+    );
+  };
+
   return (
-    <Link href={`/challenges/${challenge.id}`}>
+    <Link onMouseEnter={handleMouseEnter} href={`/challenges/${challenge.id}`}>
       <Card className='min-w-xs'>
         <CardHeader>
           <CardTitle>{challenge.name}</CardTitle>
           <CardDescription>{challenge.durationDays} days</CardDescription>
         </CardHeader>
-        <CardContent>
-          <p>{challenge.description}</p>
-        </CardContent>
       </Card>
     </Link>
   );
