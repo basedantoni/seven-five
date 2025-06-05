@@ -4,7 +4,7 @@ import {
   createUpdateSchema,
 } from 'drizzle-zod';
 import { tasks } from '../tasks';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const insertTaskSchema = createInsertSchema(tasks).extend({
   name: z.string().min(1, 'Name is required'),

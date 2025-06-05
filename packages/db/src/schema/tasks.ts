@@ -1,7 +1,6 @@
 import { relations, sql } from 'drizzle-orm';
 import { bigint, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { challengeTasks } from './challengeTasks';
-import { taskLogs } from './taskLogs';
 
 /**
  * Tasks represent a single action
@@ -21,5 +20,4 @@ export const tasks = pgTable('tasks', {
 
 export const tasksRelations = relations(tasks, ({ many }) => ({
   challengeTasks: many(challengeTasks),
-  taskLogs: many(taskLogs),
 }));

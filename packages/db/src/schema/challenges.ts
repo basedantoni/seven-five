@@ -3,6 +3,7 @@ import { bigint, integer, pgTable, text, timestamp } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { challengeTasks } from './challengeTasks';
 import { accounts } from './accounts';
+import { challengeDays } from './challengeDays';
 
 /**
  * Challenges represent long instances of
@@ -14,8 +15,7 @@ export const challenges = pgTable('challenges', {
   accountId: bigint('account_id', { mode: 'number' })
     .notNull()
     .references(() => accounts.id, { onDelete: 'cascade' }),
-  name: text('name').notNull(),
-  description: text('description'),
+  name: text('name').notNull().unique(),
   durationDays: integer('duration_days').notNull().default(75),
   startDate: timestamp('start_date', { withTimezone: true }).notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
@@ -32,4 +32,5 @@ export const challengesRelations = relations(challenges, ({ many, one }) => ({
     references: [accounts.id],
   }),
   challengeTasks: many(challengeTasks),
+  challengeDays: many(challengeDays),
 }));

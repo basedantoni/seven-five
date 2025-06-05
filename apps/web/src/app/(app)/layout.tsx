@@ -1,12 +1,12 @@
 import SignOut from '~/app/_components/signout';
-import Link from 'next/link';
+import RootCrumbClient from '~/app/_components/root-crumb-client';
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <header className='px-4 py-2'>
         <nav className='w-full flex items-center justify-between gap-4'>
-          <Link href='/challenges'>Antho</Link>
+          <RootCrumbClient />
           <SignOut />
         </nav>
       </header>

@@ -1,5 +1,5 @@
 import { getQueryClient, HydrateClient, trpc } from '~/trpc/server';
-import { ChallengeTasks } from '~/app/_components/challenges';
+import { ChallengeTaskGrid } from '~/app/_components/challenge-task-grid';
 
 export default async function ChallengePage({
   params,
@@ -15,8 +15,7 @@ export default async function ChallengePage({
   return (
     <HydrateClient>
       <main className='flex w-full h-screen flex-col items-center py-24 space-y-8'>
-        <h1 className='text-5xl font-bold'>Challenge Task</h1>
-        <ChallengeTasks id={parseInt(id)} />
+        <ChallengeTaskGrid id={parseInt(id)} />
       </main>
     </HydrateClient>
   );

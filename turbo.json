@@ -16,6 +16,7 @@
       "dependsOn": ["^clean"]
     },
     "drizzle:generate": {
+      "interactive": true,
       "cache": false,
       "outputs": ["migrations"]
     },

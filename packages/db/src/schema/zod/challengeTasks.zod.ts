@@ -1,7 +1,7 @@
 import { insertChallengeSchema } from '../zod/challenges.zod';
 import { insertTaskSchema } from '../zod/tasks.zod';
 import { challengeTasks } from '../challengeTasks';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 import {
   createInsertSchema,
   createSelectSchema,

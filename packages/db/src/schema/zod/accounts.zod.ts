@@ -4,7 +4,7 @@ import {
   createInsertSchema,
   createUpdateSchema,
 } from 'drizzle-zod';
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 export const insertAccountSchema = createInsertSchema(accounts);
 export const selectAccountSchema = createSelectSchema(accounts);

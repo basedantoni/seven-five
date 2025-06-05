@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@antho/auth/middleware';
 
-export default function middleware(request: NextRequest) {
+export function middleware(request: NextRequest) {
   if (
     request.nextUrl.pathname.startsWith('/api/auth') ||
     request.nextUrl.pathname.startsWith('/api/health') ||
