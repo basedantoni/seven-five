@@ -33,10 +33,14 @@ export function ChallengeCard({
 
   return (
     <Link onMouseEnter={handleMouseEnter} href={`/challenges/${challenge.id}`}>
-      <Card className='min-w-xs'>
-        <CardHeader>
-          <CardTitle>{challenge.name}</CardTitle>
-          <CardDescription>{challenge.durationDays} days</CardDescription>
+      <Card>
+        <CardHeader className='flex justify-between items-start'>
+          <div className='flex flex-col gap-1'>
+            <CardTitle className='truncate xl:pb-1 xl:max-w-[140px]'>
+              {challenge.name}
+            </CardTitle>
+            <CardDescription>{challenge.durationDays} days</CardDescription>
+          </div>
         </CardHeader>
       </Card>
     </Link>
@@ -69,7 +73,7 @@ export function ChallengeList() {
   }
 
   return (
-    <div className='flex flex-wrap gap-4 justify-center sm:justify-start'>
+    <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4'>
       {challenges.map((challenge) => (
         <ChallengeCard key={challenge.id} challenge={challenge} />
       ))}

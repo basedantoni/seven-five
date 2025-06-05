@@ -38,7 +38,7 @@ export default function RootLayout({
             {children}
             <ReactQueryDevtools />
           </ThemeProvider>
-          <Toaster />
+          <Toaster position='top-right' />
         </body>
       </html>
     </TRPCReactProvider>

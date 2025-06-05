@@ -75,13 +75,15 @@ export function ChallengeTaskGrid({ id }: { id: number }) {
           </div>
         </div>
         <div className='max-w-sm flex flex-wrap justify-center gap-2'>
-          {days.map((day) => (
+          {challenge.challengeDays.map(({ day, completed }) => (
             <DialogTrigger
               key={day}
               onClick={() => setSelectedDay(day)}
               className={cn(
                 'hover:bg-secondary/80 cursor-pointer flex h-10 w-10 p-4 items-center justify-center rounded-md border border-dashed border-muted-foreground text-sm text-gray-500',
-                isToday(addDays(challenge.startDate, day - 1)) && 'border-solid'
+                isToday(addDays(challenge.startDate, day - 1)) &&
+                  'border-solid',
+                completed && 'bg-green-500'
               )}
             >
               <p>{day}</p>

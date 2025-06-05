@@ -1,3 +1,4 @@
+import { isUniqueConstraintError } from '@antho/db';
 import { TRPCRouterRecord } from '@trpc/server';
 import { protectedProcedure } from '../trpc';
 import {
@@ -8,8 +9,9 @@ import {
   challengeTasks,
   tasks,
   challengeTaskSchema,
+  challengeDays,
 } from '@antho/db/schema';
-import { eq } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import { TRPCError } from '@trpc/server';
 
 export const challengeRouter = {
@@ -45,6 +47,9 @@ export const challengeRouter = {
                 task: true,
               },
             },
+            challengeDays: {
+              orderBy: [asc(challengeDays.day)],
+            },
           },
         });
       } catch (error) {
@@ -64,6 +69,12 @@ export const challengeRouter = {
           .values({ ...input, accountId: ctx.account.id })
           .returning();
       } catch (error) {
+        if (isUniqueConstraintError(error)) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Challenge already exists',
+          });
+        }
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create challenge',
@@ -76,6 +87,7 @@ export const challengeRouter = {
     .mutation(async ({ ctx, input }) => {
       try {
         return await ctx.db.transaction(async (tx) => {
+          // Create challenge
           const [challenge] = await tx
             .insert(challenges)
             .values({ ...input.challenge, accountId: ctx.account.id })
@@ -87,6 +99,18 @@ export const challengeRouter = {
             });
           }
 
+          // Create challenge days
+          const newChallengeDays = Array.from(
+            { length: input.challenge.durationDays },
+            (_, i) => ({
+              challengeId: challenge.id,
+              day: i + 1,
+            })
+          );
+
+          await tx.insert(challengeDays).values(newChallengeDays);
+
+          // Create tasks
           const taskIds: number[] = [];
           for (const task of input.tasks) {
             const [createdTask] = await tx
@@ -111,6 +135,12 @@ export const challengeRouter = {
           return { challengeId: challenge.id, taskIds };
         });
       } catch (error) {
+        if (isUniqueConstraintError(error)) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Challenge already exists',
+          });
+        }
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create challenge with tasks',

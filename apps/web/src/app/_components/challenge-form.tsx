@@ -52,11 +52,12 @@ export function CreateChallengeForm({ closeModal }: CreateChallengeFormProps) {
 
   const { mutate: createChallenge, isPending } = useMutation(
     trpc.challenge.createWithTasks.mutationOptions({
-      onSuccess: async () => {
-        form.reset();
+      onSuccess: async ({ challengeId }) => {
         await queryClient.invalidateQueries(trpc.challenge.pathFilter());
+
         if (closeModal) closeModal();
         toast.success('Challenge created successfully');
+        form.reset();
       },
       onError: (error) => {
         toast.error(error.message);
