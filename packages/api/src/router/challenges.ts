@@ -49,6 +49,9 @@ export const challengeRouter = {
             },
             challengeDays: {
               orderBy: [asc(challengeDays.day)],
+              with: {
+                challengeDayTasks: true,
+              },
             },
           },
         });

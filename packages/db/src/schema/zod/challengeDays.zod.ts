@@ -11,15 +11,16 @@ export const insertChallengeDaySchema = createInsertSchema(challengeDays, {
   completed: z.boolean().default(false),
 });
 export const selectChallengeDaySchema = createSelectSchema(challengeDays);
-export const updateChallengeDaySchema = createUpdateSchema(challengeDays)
-  .extend({
-    id: z.number().min(1, 'ID is required'),
-  })
-  .omit({
-    challengeId: true,
-  });
+export const updateChallengeDaySchema = createUpdateSchema(challengeDays).omit({
+  challengeId: true,
+});
 export const challengeDayIdSchema = selectChallengeDaySchema.pick({
   id: true,
+});
+
+// Schema for update mutations - combines id with updateable fields
+export const updateChallengeDayInputSchema = updateChallengeDaySchema.extend({
+  id: z.number(),
 });
 
 export type ChallengeDay = typeof challengeDays.$inferSelect;

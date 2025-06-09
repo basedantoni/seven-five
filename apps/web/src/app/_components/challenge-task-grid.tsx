@@ -1,8 +1,8 @@
 'use client';
 
 import { useTRPC } from '~/trpc/react';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { useState, useMemo } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useState, useMemo, useEffect } from 'react';
 import { format, addDays, isToday } from 'date-fns';
 import { cn } from '@antho/ui/lib/utils';
 
@@ -19,41 +19,55 @@ import {
 } from '@antho/ui/components/dialog';
 import { Label } from '@antho/ui/components/label';
 import { toast } from 'sonner';
-import { prefetch } from '~/trpc/server';
 
 export function ChallengeTaskGrid({ id }: { id: number }) {
   const trpc = useTRPC();
+  const queryClient = useQueryClient();
   const { data: challenge } = useQuery(
     trpc.challenge.byId.queryOptions({ id })
   );
 
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [selectedTasks, setSelectedTasks] = useState<number[]>([]);
+  const [open, setOpen] = useState(false);
 
-  const days = useMemo(() => {
-    return Array.from(
-      { length: challenge?.durationDays ?? 0 },
-      (_, i) => i + 1
-    );
-  }, [challenge]);
-
-  const { mutate: createChallengeDay } = useMutation(
-    trpc.challengeDay.create.mutationOptions({
-      onSuccess: () => {
-        toast.success('Task logged successfully');
-        setSelectedTasks([]);
+  const { mutate: updateTaskCompletions } = useMutation(
+    trpc.challengeDay.bulkUpdateTaskCompletions.mutationOptions({
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: trpc.challenge.byId.queryKey({ id }),
+        });
         setSelectedDay(null);
+        setSelectedTasks([]);
         setOpen(false);
+        toast.success('Tasks updated successfully');
       },
     })
   );
 
-  const [selectedTasks, setSelectedTasks] = useState<number[]>([]);
-  const [open, setOpen] = useState(false);
+  // Get the selected challenge day with its task completions
+  const selectedChallengeDay = useMemo(() => {
+    if (!challenge || selectedDay === null) return null;
+    return challenge.challengeDays.find((cd) => cd.day === selectedDay);
+  }, [challenge, selectedDay]);
+
+  // Initialize selected tasks when opening the dialog
+  useEffect(() => {
+    if (selectedChallengeDay && selectedChallengeDay.challengeDayTasks) {
+      const completedTaskIds = selectedChallengeDay.challengeDayTasks
+        .filter((cdt) => cdt.completed)
+        .map((cdt) => cdt.taskId);
+      setSelectedTasks(completedTaskIds);
+    }
+  }, [selectedChallengeDay]);
 
   const handleLogTasks = () => {
-    if (!challenge) return;
+    if (!selectedChallengeDay || !('id' in selectedChallengeDay)) return;
 
-    selectedTasks.forEach((taskId) => {});
+    updateTaskCompletions({
+      challengeDayId: selectedChallengeDay.id,
+      completedTaskIds: selectedTasks,
+    });
   };
 
   if (!challenge) {
@@ -75,20 +89,29 @@ export function ChallengeTaskGrid({ id }: { id: number }) {
           </div>
         </div>
         <div className='max-w-sm flex flex-wrap justify-center gap-2'>
-          {challenge.challengeDays.map(({ day, completed }) => (
-            <DialogTrigger
-              key={day}
-              onClick={() => setSelectedDay(day)}
-              className={cn(
-                'hover:bg-secondary/80 cursor-pointer flex h-10 w-10 p-4 items-center justify-center rounded-md border border-dashed border-muted-foreground text-sm text-gray-500',
-                isToday(addDays(challenge.startDate, day - 1)) &&
-                  'border-solid',
-                completed && 'bg-green-500'
-              )}
-            >
-              <p>{day}</p>
-            </DialogTrigger>
-          ))}
+          {challenge.challengeDays.map((challengeDay) => {
+            const { day, completed, challengeDayTasks } = challengeDay;
+            const hasCompletedTasks =
+              challengeDayTasks && challengeDayTasks.some((t) => t.completed);
+
+            return (
+              <DialogTrigger
+                key={day}
+                onClick={() => setSelectedDay(day)}
+                className={cn(
+                  'hover:bg-secondary/80 cursor-pointer flex h-10 w-10 p-4 items-center justify-center rounded-md border border-dashed border-muted-foreground text-sm',
+                  isToday(addDays(challenge.startDate, day - 1)) &&
+                    'border-solid border-2',
+                  completed && 'bg-success text-success-foreground border-none',
+                  !completed &&
+                    hasCompletedTasks &&
+                    'bg-caution text-caution-foreground hover:bg-caution/60 border-none'
+                )}
+              >
+                <p>{day}</p>
+              </DialogTrigger>
+            );
+          })}
         </div>
       </div>
       <DialogContent>
@@ -124,12 +147,9 @@ export function ChallengeTaskGrid({ id }: { id: number }) {
               </li>
             </ul>
           ))}
-          {selectedDay &&
-            isToday(addDays(challenge.startDate, selectedDay - 1)) && (
-              <div className='flex justify-end'>
-                <Button onClick={handleLogTasks}>Log Tasks</Button>
-              </div>
-            )}
+          <div className='flex justify-end'>
+            <Button onClick={handleLogTasks}>Save</Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

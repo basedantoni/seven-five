@@ -8,6 +8,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import { relations, sql } from 'drizzle-orm';
 import { challenges } from './challenges';
+import { challengeDayTasks } from './challengeDayTasks';
 
 export const challengeDays = pgTable('challenge_days', {
   id: bigint('id', { mode: 'number' }).primaryKey().generatedAlwaysAsIdentity(),
@@ -24,9 +25,13 @@ export const challengeDays = pgTable('challenge_days', {
     .default(sql`now()`),
 });
 
-export const challengeDayRelations = relations(challengeDays, ({ one }) => ({
-  challenge: one(challenges, {
-    fields: [challengeDays.challengeId],
-    references: [challenges.id],
-  }),
-}));
+export const challengeDayRelations = relations(
+  challengeDays,
+  ({ one, many }) => ({
+    challenge: one(challenges, {
+      fields: [challengeDays.challengeId],
+      references: [challenges.id],
+    }),
+    challengeDayTasks: many(challengeDayTasks),
+  })
+);

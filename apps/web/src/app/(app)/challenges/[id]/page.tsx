@@ -14,7 +14,7 @@ export default async function ChallengePage({
 
   return (
     <HydrateClient>
-      <main className='flex w-full h-screen flex-col items-center py-24 space-y-8'>
+      <main className='flex w-full h-screen flex-col items-center px-4 py-6 sm:py-24 space-y-8'>
         <ChallengeTaskGrid id={parseInt(id)} />
       </main>
     </HydrateClient>
